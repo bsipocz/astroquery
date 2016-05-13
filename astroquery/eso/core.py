@@ -248,6 +248,29 @@ class EsoClass(QueryWithLogin):
             self._instrument_list.append(u'harps')
         return self._instrument_list
 
+    def list_surveys(self, cache=True):
+        """ List all the available surveys (phase 3) in the ESO archive.
+
+        Returns
+        -------
+        survey_list : list of strings
+        cache : bool
+            Cache the response for faster subsequent retrieval
+
+        """
+        if self._survey_list is None:
+            survey_list_response = self._request(
+                "GET", "http://archive.eso.org/wdb/wdb/adp/phase3_main/form",
+                cache=cache)
+            root = BeautifulSoup(survey_list_response .content, 'html5lib')
+            self._survey_list = []
+            for select in root.select("select[name=phase3_program]"):
+                for element in select.select('option'):
+                    survey = element.text.strip()
+                    if survey not in self._survey_list and 'Any' not in survey:
+                        self._survey_list.append(survey)
+        return self._survey_list
+
     def query_surveys(self, surveys='', cache=True,
                       help=False, open_form=False, **kwargs):
         """
@@ -286,7 +309,7 @@ class EsoClass(QueryWithLogin):
                 query_dict["max_rows_returned"] = self.ROW_LIMIT
             else:
                 query_dict["max_rows_returned"] = 10000
-    
+
             survey_response = self._activate_form(survey_form, form_index=0,
                                                   inputs=query_dict, cache=cache)
 

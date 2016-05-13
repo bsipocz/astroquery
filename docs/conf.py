@@ -50,6 +50,8 @@ setup_cfg = dict(conf.items('metadata'))
 
 # -- General configuration ----------------------------------------------------
 
+automodsumm_inherited_members = True
+
 # If your documentation needs a minimal Sphinx version, state it here.
 #needs_sphinx = '1.2'
 
