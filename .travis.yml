@@ -15,6 +15,7 @@ addons:
 python:
     - 2.7
     - 3.4
+    - 3.5
 
 env:
     global:
@@ -24,7 +25,7 @@ env:
         - MAIN_CMD='python setup.py'
         - NUMPY_VERSION=1.10
         - ASTROPY_VERSION=stable
-        - CONDA_DEPENDENCIES='requests beautiful-soup matplotlib html5lib'
+        - CONDA_DEPENDENCIES='requests beautifulsoup4 matplotlib html5lib'
         - PIP_DEPENDENCIES='keyring aplpy pyregion'
 
     matrix:
@@ -34,15 +35,6 @@ env:
 
 matrix:
     include:
-
-        # Test for py 3.5 (move this up to the main matrix once beautiful-soup is in conda)
-        - python: 3.5
-          env: SETUP_CMD='egg_info'
-        - python: 3.5
-          env: SETUP_CMD='test'
-               CONDA_DEPENDENCIES='requests matplotlib html5lib'
-               PIP_DEPENDENCIES='keyring aplpy pyregion beautifulsoup4'
-
         # Do a coverage test in Python 2.
         - python: 2.7
           env: SETUP_CMD='test --coverage'
@@ -64,24 +56,20 @@ matrix:
           env: ASTROPY_VERSION=development SETUP_CMD='test'
         - python: 3.5
           env: ASTROPY_VERSION=development SETUP_CMD='test'
-               CONDA_DEPENDENCIES='requests matplotlib html5lib'
-               PIP_DEPENDENCIES='keyring aplpy pyregion beautifulsoup4'
         - python: 2.7
           env: ASTROPY_VERSION=lts SETUP_CMD='test'
         - python: 3.5
           env: ASTROPY_VERSION=lts SETUP_CMD='test'
-               CONDA_DEPENDENCIES='requests matplotlib html5lib'
-               PIP_DEPENDENCIES='keyring aplpy pyregion beautifulsoup4'
 
         # Try with optional dependencies disabled
         - python: 2.7
           env: SETUP_CMD='test'
-               CONDA_DEPENDENCIES='requests beautiful-soup html5lib'
+               CONDA_DEPENDENCIES='requests beautifulsoup4 html5lib'
                PIP_DEPENDENCIES='keyring'
         - python: 3.5
           env: SETUP_CMD='test'
-               CONDA_DEPENDENCIES='requests html5lib'
-               PIP_DEPENDENCIES='keyring beautifulsoup4'
+               CONDA_DEPENDENCIES='requests beautifulsoup4 html5lib'
+               PIP_DEPENDENCIES='keyring'
 
         # Try older numpy versions
         - python: 2.7
