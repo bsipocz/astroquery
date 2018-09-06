@@ -45,8 +45,6 @@ env:
 
     matrix:
         - PYTHON_VERSION=2.7 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.4 SETUP_CMD='egg_info'
-        - PYTHON_VERSION=3.5 SETUP_CMD='egg_info'
         - PYTHON_VERSION=3.6 SETUP_CMD='egg_info'
 
 matrix:
@@ -140,12 +138,6 @@ matrix:
         - os: linux
           stage: Test docs, astropy dev, and without optional dependencies
           env: CONDA_DEPENDENCIES='requests beautifulsoup4 html5lib keyring'
-
-        # Try numpy pre-release version, this runs only when a pre-release
-        # is available on pypi.
-        - os: linux
-          stage: Tests with other Python/Numpy versions
-          env: NUMPY_VERSION=prerelease DEBUG=True EVENT_TYPE='push pull_request cron'
 
         # Do a PEP8 test with pycodestyle
         - os: linux
