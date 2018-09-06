@@ -123,16 +123,14 @@ matrix:
           env: ASTROPY_VERSION=development EVENT_TYPE='pull_request'
 
         # Astropy stable and LTS currently the same, enable these back when 3.0 is out
-        # - os: linux
-        #   stage: Test docs, astropy dev, and without optional dependencies
-        #   env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts
-        #        EVENT_TYPE='push pull_request' PYTEST_VERSION=2.7
-        ## Need to test with python3.5 for now as py3.6 requires pytest3 (due
-        ## to the usage of unittest) that is incompatible with LTS
-        # - os: linux
-        #   stage: Test docs, astropy dev, and without optional dependencies
-        #   env: PYTHON_VERSION=3.5 ASTROPY_VERSION=lts
-        #        EVENT_TYPE='push pull_request' PYTEST_VERSION=2.7
+        - os: linux
+          stage: Test docs, astropy dev, and without optional dependencies
+          env: PYTHON_VERSION=2.7 ASTROPY_VERSION=lts NUMPY_VERSION=1.13
+               EVENT_TYPE='push pull_request'
+        - os: linux
+           stage: Test docs, astropy dev, and without optional dependencies
+           env: PYTHON_VERSION=3.6 ASTROPY_VERSION=lts NUMPY_VERSION=1.14
+                EVENT_TYPE='push pull_request'
 
         # Try with optional dependencies disabled
         - os: linux
