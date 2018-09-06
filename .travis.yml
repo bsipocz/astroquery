@@ -9,15 +9,6 @@ os:
 # Setting sudo to false opts in to Travis-CI container-based builds.
 sudo: false
 
-# The apt packages below are needed for sphinx builds, which can no longer
-# be installed with sudo apt-get.
-addons:
-    apt:
-        packages:
-            - graphviz
-            - texlive-latex-extra
-            - dvipng
-
 stage: Initial tests
 
 stages:
@@ -95,6 +86,11 @@ matrix:
         - os: linux
           stage: Test docs, astropy dev, and without optional dependencies
           env: SETUP_CMD='build_docs -w'
+          apt:
+             packages:
+                - graphviz
+                - texlive-latex-extra
+                - dvipng
 
         # Try all python versions and Numpy versions. Since we can assume that
         # the Numpy developers have taken care of testing Numpy with different
