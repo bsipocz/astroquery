@@ -1,6 +1,8 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
 import six
+from six import BytesIO
+
 from astropy.io import ascii
 import astropy.units as u
 from astropy.table import Table
@@ -74,7 +76,8 @@ class XMatchClass(BaseQuery):
                                     get_query_payload=get_query_payload)
         if get_query_payload:
             return response
-        return self._parse_text(response.text)
+
+        return Table.read(BytesIO(response.content), format='votable')
 
     @prepend_docstr_nosections("\n" + query.__doc__)
     def query_async(self, cat1, cat2, max_distance, colRA1=None, colDec1=None,
@@ -92,7 +95,7 @@ class XMatchClass(BaseQuery):
         payload = {
             'request': 'xmatch',
             'distMaxArcsec': max_distance.to(u.arcsec).value,
-            'RESPONSEFORMAT': 'csv',
+            'RESPONSEFORMAT': 'votable',
         }
         kwargs = {}
 
