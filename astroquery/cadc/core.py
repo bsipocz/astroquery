@@ -23,8 +23,7 @@ from . import conf
 try:
     import pyvo
 except ImportError:
-    msg = 'Please install pyvo. astropy.cadc does not work without it.'
-    raise ImportError(msg)
+    print('Please install pyvo. astropy.cadc does not work without it.')
 
 
 __all__ = ['Cadc', 'CadcClass']
