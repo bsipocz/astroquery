@@ -13,18 +13,17 @@ from astropy.io.votable.tree import VOTableFile, Resource, Table, Field
 from astropy.io.votable import parse
 from six import BytesIO
 from astroquery.utils.commons import parse_coordinates
-import pytest
 import tempfile
+from astroquery.cadc import Cadc, conf
+import astroquery.cadc.core as cadc_core
+from unittest.mock import Mock, patch, PropertyMock
+import pytest
+
 try:
     from pyvo.dal import tap
-    from astroquery.cadc import Cadc, conf
-    import astroquery.cadc.core as cadc_core
+    pyvo_OK = True
 except ImportError:
-    pytest.skip("Install pyvo for the cadc module.", allow_module_level=True)
-try:
-    from unittest.mock import Mock, patch, PropertyMock
-except ImportError:
-    pytest.skip("Install mock for the cadc tests.", allow_module_level=True)
+    pyvo_OK = 0
 
 
 # monkeypatch get_access_url to prevent internet calls
@@ -37,8 +36,9 @@ def data_path(filename):
     return os.path.join(data_dir, filename)
 
 
-@patch('astroquery.cadc.core.get_access_url',
-       Mock(side_effect=lambda x: 'https://some.url'))
+@pytest.mark.skipif('not pyvo_OK')
+#@patch('astroquery.cadc.core.get_access_url',
+#       Mock(side_effect=lambda x: 'https://some.url'))
 def test_get_tables():
     # default parameters
     table_set = PropertyMock()
@@ -53,6 +53,7 @@ def test_get_tables():
 
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x: 'https://some.url'))
+@pytest.mark.skipif('not pyvo_OK')
 def test_get_table():
     table_set = PropertyMock()
     tables_result = [Mock(), Mock(), Mock()]
@@ -93,6 +94,7 @@ def test_get_collections():
     assert 'DAO' in result
 
 
+@pytest.mark.skipif('not pyvo_OK')
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x: 'https://some.url'))
 def test_load_async_job():
@@ -109,6 +111,7 @@ def test_load_async_job():
             assert job.job_id == '123'
 
 
+@pytest.mark.skipif('not pyvo_OK')
 @pytest.mark.skip('Disabled until job listing available in pyvo')
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x: 'https://some.url'))
@@ -119,6 +122,7 @@ def test_list_async_jobs():
         tap.list_async_jobs()
 
 
+@pytest.mark.skipif('not pyvo_OK')
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x, y=None: 'https://some.url'))
 def test_auth():
@@ -176,6 +180,7 @@ def test_get_access_url():
                                      'ivo://ivoa.net/std/VOSI#tables-1.1')
 
 
+@pytest.mark.skipif('not pyvo_OK')
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x, y=None: 'https://some.url'))
 def test_get_data_urls():
@@ -247,6 +252,7 @@ def test_misc():
                                  'radius': 0.3})['query']
 
 
+@pytest.mark.skipif('not pyvo_OK')
 @patch('astroquery.cadc.core.get_access_url',
        Mock(side_effect=lambda x, y=None: 'https://some.url'))
 def test_exec_sync():
