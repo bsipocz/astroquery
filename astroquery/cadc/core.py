@@ -22,7 +22,7 @@ from . import conf
 
 try:
     import pyvo
-except ImportError as e:
+except ImportError:
     msg = 'Please install pyvo. astropy.cadc does not work without it.'
     raise ImportError(msg)
 
