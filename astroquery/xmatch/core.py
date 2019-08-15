@@ -177,22 +177,5 @@ class XMatchClass(BaseQuery):
 
         return content.splitlines()
 
-    def _parse_text(self, text):
-        """
-        Parse a CSV text file that has potentially duplicated header names
-        """
-        header = text.split("\n")[0]
-        colnames = header.split(",")
-        for cn in colnames:
-            if colnames.count(cn) > 1:
-                ii = 1
-                while colnames.count(cn) > 0:
-                    colnames[colnames.index(cn)] = cn + "_{ii}".format(ii=ii)
-                    ii += 1
-        new_text = ",".join(colnames) + "\n" + "\n".join(text.split("\n")[1:])
-        result = ascii.read(new_text, format='csv')
-
-        return result
-
 
 XMatch = XMatchClass()
