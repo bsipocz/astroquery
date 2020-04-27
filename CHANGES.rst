@@ -9,8 +9,19 @@ esa/xmm-newton
 
 - A new ESA archive service for XMM-Newton is now supported [#1557]
 
+noirlab
+^^^^^^^
+
+- Module added to access the NOIRLab (formally NOAO) archive. [#1638]
+
+
 Service fixes and enhancements
 ------------------------------
+
+casda
+^^^^^
+
+- Add ability to stage and download ASKAP data. [#1706]
 
 gaia
 ^^^^
@@ -30,6 +41,7 @@ jplhorizons
 - Fix for changes in HORIZONS return results after their 2020 Feb 12
   update. [#1650]
 
+
 alma
 ^^^^
 
@@ -37,13 +49,29 @@ alma
   refactor.  The user-facing API should remain mostly the same, but some
   service interruption may have occurred.  Note that the ``stage_data`` column
   ``uid`` has been renamed ``mous_uid``, which is a technical correction, and
-  several columns have been added [#1644,#1665]
+  several columns have been added [#1644,#1665,#1683]
+- The contents of tarfiles can be shown with the ``expand_tarfiles`` keyword
+  to ``stage_data`` [#1683]
+
+vizier
+^^^^^^
+
+- It is now possible to specify constraints to ``query_region()``
+  with the ``column_filters`` keyword. [#1702]
+
+
+mast
+^^^^
 
 
 Infrastructure, Utility and Other Changes and Additions
 -------------------------------------------------------
 
+- Fixed a bug that would prevent the TOP statement from being properly added
+  to a TAP query containing valid '\n'. The bug was revealed by changes to
+  the gaia module, introduced in version 0.4. [#1680]
 
+- Added new ``json`` keyword to BaseQuery requests. [#1657]
 
 
 0.4 (2020-01-24)
@@ -97,6 +125,8 @@ nasa_exoplanet_archive
 - Redefined the query API so as to prevent downloading of the whole database.
   Added two functions ``query_planet`` (to query for a specific exoplanet), and
   ``query_star`` (to query for all exoplanets under a specific stellar system) [#1606]
+
+
 
 splatalogue
 ^^^^^^^^^^^
