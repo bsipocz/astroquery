@@ -342,4 +342,5 @@ class XMMNewtonClass(BaseQuery):
             stack_4xmm_table, \
             slew_source_table
 
+
 XMMNewton = XMMNewtonClass()
