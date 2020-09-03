@@ -86,13 +86,3 @@ class TestXMMNewton():
         xsa = XMMNewtonClass(self.get_dummy_tap_handler())
         xsa.get_columns("table", only_names=True, verbose=True)
         dummyTapHandler.check_call("get_columns", parameters2)
-
-    @pytest.mark.remote_data
-    def test_get_epic_metadata(self):
-        xsa = XMMNewtonClass()
-        t1, t2, t3, t4 = xsa.get_epic_metadata(target_name="4XMM J122934.7+015657")
-        print(t1)
-        print(t2)
-        print(t3)
-        print(t4)
-        xsa.get_epic_metadata(coordinates=SkyCoord.from_name("4XMM J122934.7+015657", parse=True))
