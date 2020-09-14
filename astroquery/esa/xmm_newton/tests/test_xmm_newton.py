@@ -12,8 +12,6 @@ Created on 4 Sept. 2019
 
 import pytest
 
-from astropy.coordinates import SkyCoord
-
 from ..core import XMMNewtonClass
 from ..tests.dummy_tap_handler import DummyXMMNewtonTapHandler
 
