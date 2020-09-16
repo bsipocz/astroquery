@@ -50,6 +50,10 @@ alma
   VirtualObservatory (VO) services such as TAP, ObsCore etc. The alma
   library has been updated accordingly. [#1689]
 
+esa.xmm_newton
+^^^^^^^^^^^^^^
+
+- Added new function to download EPIC sources metadate. [#1814]
 
 0.4.1 (2020-06-19)
 ==================
