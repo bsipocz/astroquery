@@ -1069,14 +1069,21 @@ class HorizonsClass(BaseQuery):
         H, G = nan, nan
         M1, M2, k1, k2, phcof = nan, nan, nan, nan, nan
         headerline = []
+        centername = ''
         for idx, line in enumerate(src):
             # read in ephemerides header line; replace some field names
             if (self.query_type == 'ephemerides' and
                     "Date__(UT)__HR:MN" in line):
                 headerline = str(line).split(',')
                 headerline[2] = 'solar_presence'
-                headerline[3] = 'flags'
+                if 'Earth' in centername:
+                    headerline[3] = 'lunar_presence'
+                else:
+                    headerline[3] = 'interfering_body'
                 headerline[-1] = '_dump'
+                if 'g:' in self.id:
+                    headerline[4] = 'nearside_flag'
+                    headerline[5] = 'illumination_flag'
             # read in elements header line
             elif (self.query_type == 'elements' and
                   "JDTDB," in line):
@@ -1093,6 +1100,9 @@ class HorizonsClass(BaseQuery):
             # identify start of data block
             if "$$SOE" in line:
                 data_start_idx = idx + 1
+            # read in center body name
+            if "Center body name" in line:
+                centername = line[18:50].strip()
             # read in targetname
             if "Target body name" in line:
                 targetname = line[18:50].strip()
