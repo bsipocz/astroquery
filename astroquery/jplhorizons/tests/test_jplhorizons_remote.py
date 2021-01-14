@@ -1,7 +1,8 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
-
+from functools import partial
 import pytest
+import random
 from astropy.tests.helper import assert_quantity_allclose
 from numpy.ma import is_masked
 
@@ -20,7 +21,7 @@ class TestHorizonsClass:
         assert res['targetname'] == "1 Ceres (A801 AA)"
         assert res['datetime_str'] == "2000-Jan-01 00:00:00.000"
         assert res['solar_presence'] == ""
-        assert res['flags'] == ""
+        assert res['lunar_presence'] == ""
         assert res['elongFlag'] == '/L'
         assert res['airmass'] == 999
 
@@ -31,7 +32,7 @@ class TestHorizonsClass:
         assert_quantity_allclose(
             [2451544.5,
              188.70280, 9.09829, 34.40956, -2.68359,
-             8.33, 6.89, 96.171,
+             8.329, 6.869, 96.171,
              161.3828, 10.4528, 2.551099014238, 0.1744491,
              2.26315116146176, -21.9390511, 18.822054,
              95.3996, 22.5698, 292.551, 296.850,
@@ -66,7 +67,7 @@ class TestHorizonsClass:
         assert res['targetname'] == "1P/Halley"
         assert res['datetime_str'] == "2080-Jan-11 09:00"
         assert res['solar_presence'] == ""
-        assert res['flags'] == "m"
+        assert res['lunar_presence'] == "m"
         assert res['elongFlag'] == '/L'
 
         for value in ['H', 'G']:
@@ -89,7 +90,7 @@ class TestHorizonsClass:
         assert res['targetname'] == "73P/Schwassmann-Wachmann 3"
         assert res['datetime_str'] == "2080-Jan-01 00:00"
         assert res['solar_presence'] == "*"
-        assert res['flags'] == "m"
+        assert res['lunar_presence'] == "m"
         assert res['elongFlag'] == '/L'
 
         for value in ['H', 'G']:
@@ -114,7 +115,7 @@ class TestHorizonsClass:
         assert res['targetname'] == "167P/CINEOS"
         assert res['datetime_str'] == "2080-Jan-01 00:00"
         assert res['solar_presence'] == "*"
-        assert res['flags'] == "m"
+        assert res['lunar_presence'] == "m"
         assert res['elongFlag'] == '/T'
 
         for value in ['H', 'G', 'M1', 'k1']:
@@ -141,7 +142,7 @@ class TestHorizonsClass:
         assert res['targetname'] == "12P/Pons-Brooks"
         assert res['datetime_str'] == "2080-Jan-01 00:00"
         assert res['solar_presence'] == "*"
-        assert res['flags'] == "m"
+        assert res['lunar_presence'] == "m"
         assert res['elongFlag'] == '/L'
 
         for value in ['H', 'G', 'phasecoeff']:
@@ -166,6 +167,137 @@ class TestHorizonsClass:
                               airmass_lessthan=5)
 
         assert len(res) == 32
+
+    def test_ephemerides_query_seven(self):
+        # see if whatever Horizons' current response to 'give me all
+        # the columns,' with geodetic coordinates specified, makes the
+        # parser break
+        obj = jplhorizons.Horizons(
+            id='g:12,12,0@301',
+            location={
+                'lon': -9.46,
+                'lat': 40.75,
+                'elevation': 0,
+                'body': '599'
+            },
+            epochs=2500000,
+            id_type="majorbody"
+        ).ephemerides(quantities='A')
+
+        # has this known value changed?
+        assert obj['EL'][0] == -5.38428
+
+    def test_ephemerides_query_eight(self):
+        # is a sub-Cydonia point on the Moon in fact looking back at Cydonia?
+        moon_from_cydonia = jplhorizons.Horizons(
+            id='301',
+            location={
+                'lon': -350.54,
+                'lat': 40.75,
+                'elevation': 0,
+                'body': '499'
+            },
+            epochs=random.randint(2400000, 2600000),
+            id_type="majorbody"
+        ).ephemerides(quantities='A')
+
+        intercept_time, intercept_lon, intercept_lat = tuple(
+            moon_from_cydonia[['datetime_jd', 'PDObsLon', 'PDObsLat']][0]
+        )
+        cydonia_from_subcydonian_point = jplhorizons.Horizons(
+            id='g:-350.54,40.75,0@499',
+            location={
+                'lon': intercept_lon,
+                'lat': intercept_lat,
+                'elevation': 0,
+                'body': '301'
+            },
+            epochs=intercept_time,
+            id_type="majorbody"
+        ).ephemerides(quantities=45)
+        lunar_dec = moon_from_cydonia['DEC_ICRF_a_app'][0]
+        cydonia_dec = cydonia_from_subcydonian_point['DEC_ICRF_a_app'][0]
+        dec_pair = []
+        for dec_value in [lunar_dec, cydonia_dec]:
+            # it's possible that it might be good to add a special case to
+            # handle the 'Horizons renders lots of whitespace between the
+            # negative sign and the numbers in these particular fields' issue
+            if isinstance(dec_value, str):
+                dec_value = float(dec_value.replace(' ', ''))
+            dec_pair.append(dec_value)
+
+        assert (abs(dec_pair[0]) - abs(dec_pair[1])) < 0.0001
+
+    def test_ephemerides_query_nine(self):
+        # test correctness of returned values, 'flag' column
+        # parsing for various combinations of coordinate types,
+        # observer location, etc.
+        times = list(range(2451548, 245170))  # arbitrary shared jd intervals
+        test_constructor = partial(
+            jplhorizons.Horizons, epochs=times, id_type="majorbody"
+        )
+        tethys_from_titan = test_constructor(
+            id='603',
+            location={
+                'lon': 0,
+                'lat': 0,
+                'elevation': 0,
+                'body': '601'
+            }
+        ).ephemerides()
+        titan_from_tethys = test_constructor(
+            id='g:0,0,0@601',
+            location={
+                'lon': 0,
+                'lat': 0,
+                'elevation': 0,
+                'body': '603'
+            },
+        ).ephemerides()
+        nearside = test_constructor(
+            id='g:0,0,0@301',
+            location=-1,  # Arecibo
+        ).ephemerides()
+        farside = test_constructor(
+            id='g:180,0,0@301',
+            location=5,  # Meudon Great Refractor
+        ).ephemerides()
+        farside_geocentric = test_constructor(
+            id='g:180,0,0@301',
+        ).ephemerides()
+        earth_to_moon = test_constructor(
+            id='301',
+        ).ephemerides()
+
+        # check correctness of 'flag' column names for various cases
+        assert tuple(tethys_from_titan.columns[0:7]) == (
+            'targetname', 'datetime_str', 'datetime_jd',
+            'solar_presence', 'interfering_body', 'RA', 'DEC'
+        )
+        assert tuple(earth_to_moon.columns[0:7]) == (
+            'targetname', 'datetime_str', 'datetime_jd', 'solar_presence',
+            'lunar_presence', 'RA', 'DEC'
+        )
+        assert tuple(titan_from_tethys.columns[0:7]) == (
+            'targetname', 'datetime_str', 'datetime_jd', 'solar_presence',
+            'interfering_body', 'nearside_flag', 'illumination_flag'
+        )
+        assert tuple(nearside.columns[0:7]) == (
+            'targetname', 'datetime_str', 'datetime_jd', 'solar_presence',
+            'lunar_presence', 'nearside_flag', 'illumination_flag'
+        )
+
+        # check correctness of known 'flag' values for some of these cases
+        assert all(nearside['nearside_flag'] == 'N')
+        assert all(farside['nearside_flag'] == '-')
+        assert tuple(farside[[
+            'solar_presence', 'lunar_presence', 'nearside_flag',
+            'illumination_flag'
+        ]][0]) == ('*', 'm', '-', 'L')
+        assert tuple(farside_geocentric[[
+            'solar_presence', 'lunar_presence', 'nearside_flag',
+            'illumination_flag'
+        ]][0]) == ('', '', '-', 'L')
 
     def test_ephemerides_query_raw(self):
         res = (jplhorizons.Horizons(id='Ceres', location='500',

@@ -67,7 +67,7 @@ def test_ephemerides_query(patch_request):
     assert res['targetname'] == "1 Ceres (A801 AA)"
     assert res['datetime_str'] == "2000-Jan-01 00:00:00.000"
     assert res['solar_presence'] == ""
-    assert res['flags'] == ""
+    assert res['lunar_presence'] == ""
     assert res['elongFlag'] == '/L'
     assert res['airmass'] == 999
 

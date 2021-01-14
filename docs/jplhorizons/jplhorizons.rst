@@ -35,8 +35,32 @@ In order to query information for a specific Solar System body, a
    >>> print(obj)
    JPLHorizons instance "Ceres"; location=568, epochs=[2458133.33546], id_type=smallbody
 
-``id`` refers to the target identifier and is mandatory; the exact
+``id`` refers topocentric the target identifier and is mandatory; the exact
 string will be used in the query to the Horizons system.
+
+Named locations on body surfaces can be specified as targets (on Earth, this
+includes `MPC Observatory codes`_).The syntax for this is
+``'{name or code}@{body id}'``. For instance, ``id='5@399'`` specifies site 5
+on body 399: the Grande Lunette at Meudon on Earth.
+
+User-defined topocentric locations can also be specified as targets for bodies
+with defined shapes and rotational models. The syntax for this is different
+from the syntax for specifying topocentric observer locations. It is
+``'g:{E-longitude},{latitude},{elevation}@{body id}'``.
+
+**Caution:** Counterintuitively, although Horizons treats West as positive on
+most prograde- rotating bodies, these locations are still specified using
+East longitude. This means that you will receive errors if you enter any
+positive value for longitude on most bodies. For instance,
+``id='g:-350.54,40.75,0@499'`` targets 9.46 degrees W, 40.75 degrees N on body
+499: the Cydonia region on Mars. Retrograde-rotating bodies, like Venus (299)
+follow the opposite rule: you will receive errors if you pass Horizons a
+negative longitude coordinate on these bodies. Earth, the Moon, and the Sun
+are problematic exceptions to these rules. Although they rotate prograde,
+Horizons treats East longitude as positive on thse bodies -- *and* it also
+accepts West longitudes specified as negative values! This means that
+'g:-30,0,0@399' and 'g:-30,0,0@499' both return nice-looking results but have
+different 'handedness,' which can lead to trouble if one is not careful.
 
 ``location`` means either the observer's location (e.g., Horizons
 ephemerides query) or the body relative to which orbital elements are
@@ -50,7 +74,8 @@ the form of a dictionary. The dictionary has to be formatted as
 follows: {``'lon'``: longitude in degrees (East positive, West
 negative), ``'lat'``: latitude in degrees (North positive, South
 negative), ``'elevation'``: elevation in km above the reference
-ellipsoid}. In addition, ``'body'`` can be set to the Horizons body ID
+ellipsoid}. (See the caveats in the 'id' paragraph about longitude direction
+on various bodies.) In addition, ``'body'`` can be set to the Horizons body ID
 of the central body if different from Earth; by default, it is
 assumed that this location is on Earth if it has not been specifically
 set. The following example uses the coordinates of the `Statue of

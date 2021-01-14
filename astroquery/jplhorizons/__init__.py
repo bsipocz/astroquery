@@ -70,8 +70,12 @@ class Conf(_config.ConfigNamespace):
                    'DEC___(a-app)': ('DEC_app', 'deg'),
                    'R.A._(r-app)': ('RA_app', 'deg'),
                    'DEC_(r-app)': ('DEC_app', 'deg'),
+                   'RA_(ICRF-a-app)': ('RA_ICRF_a_app', 'deg'),
+                   'DEC_(ICRF-a-app)': ('DEC_ICRF_a_app', 'deg'),
                    'dRA*cosD': ('RA_rate', 'arcsec/hour'),
                    'd(DEC)/dt': ('DEC_rate', 'arcsec/hour'),
+                   'I_dRA*cosD': ('RA_rate_ICRF', 'arcsec/hour'),
+                   'I_d(DEC)/dt': ('DEC_rate_ICRF', 'arcsec/hour'),
                    'Azi_(a-app)': ('AZ', 'deg'),
                    'Elev_(a-app)': ('EL', 'deg'),
                    'Azi_(r-appr)': ('AZ', 'deg'),
@@ -107,6 +111,7 @@ class Conf(_config.ConfigNamespace):
                    'Obsrv-lat': ('PDObsLat', 'deg'),  # deprecated
                    'Solar-lon': ('PDSunLon', 'deg'),  # deprecated
                    'Solar-lat': ('PDSunLat', 'deg'),  # deprecated
+                   'App_Lon_Sun': ('SunLon_app','deg'),
                    'SN.ang': ('SubSol_ang', 'deg'),
                    'SN.dist': ('SubSol_dist', 'arcsec'),
                    'NP.ang': ('NPole_ang', 'deg'),
