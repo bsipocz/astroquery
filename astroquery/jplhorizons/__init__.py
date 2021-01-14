@@ -111,7 +111,7 @@ class Conf(_config.ConfigNamespace):
                    'Obsrv-lat': ('PDObsLat', 'deg'),  # deprecated
                    'Solar-lon': ('PDSunLon', 'deg'),  # deprecated
                    'Solar-lat': ('PDSunLat', 'deg'),  # deprecated
-                   'App_Lon_Sun': ('SunLon_app','deg'),
+                   'App_Lon_Sun': ('SunLon_app', 'deg'),
                    'SN.ang': ('SubSol_ang', 'deg'),
                    'SN.dist': ('SubSol_dist', 'arcsec'),
                    'NP.ang': ('NPole_ang', 'deg'),

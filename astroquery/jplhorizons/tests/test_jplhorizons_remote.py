@@ -352,7 +352,7 @@ class TestHorizonsClass:
     def test_elements_query_raw(self):
         res = jplhorizons.Horizons(id='Ceres', location='500@10',
                                    epochs=2451544.5).elements(
-                                       get_raw_response=True)
+            get_raw_response=True)
 
         assert len(res) >= 7400
 
@@ -384,7 +384,7 @@ class TestHorizonsClass:
     def test_vectors_query_raw(self):
         res = jplhorizons.Horizons(id='Ceres', location='500@10',
                                    epochs=2451544.5).vectors(
-                                       get_raw_response=True)
+            get_raw_response=True)
 
         assert len(res) >= 6900
 
@@ -510,4 +510,4 @@ class TestHorizonsClass:
         vec_simple = obj.ephemerides(extra_precision=False)
         vec_highprec = obj.ephemerides(extra_precision=True)
 
-        assert (vec_simple['RA'][0]-vec_highprec['RA'][0]) > 1e-7
+        assert (vec_simple['RA'][0] - vec_highprec['RA'][0]) > 1e-7
