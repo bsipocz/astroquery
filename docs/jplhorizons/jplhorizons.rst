@@ -35,7 +35,7 @@ In order to query information for a specific Solar System body, a
    >>> print(obj)
    JPLHorizons instance "Ceres"; location=568, epochs=[2458133.33546], id_type=smallbody
 
-``id`` refers topocentric the target identifier and is mandatory; the exact
+``id`` refers to the target identifier and is mandatory; the exact
 string will be used in the query to the Horizons system.
 
 Named locations on body surfaces can be specified as targets (on Earth, this
