@@ -648,5 +648,3 @@ class TestTap:
         mock_logout.side_effect = HTTPError("Login error")
         tap.logout()
         assert (mock_logout.call_count == 3)
-
-
