@@ -3,10 +3,13 @@
 
 New Tools and Services
 ----------------------
+
 gaia
 ^^^^
 
-- TAP notifications service is now available for Gaia. If there is notification for the users, e.g planned or unplanned downtimes of the Gaia Archive, etc. [#2376]
+- TAP notifications service is now available for Gaia. If there is notification for the users,
+e.g planned or our unplanned downtimes of the archive, etc. The notification
+will be also visible when accessing the archive through Astroquery. [#2376]
 
 hsa
 ^^^
@@ -18,19 +21,43 @@ hsa
 Service fixes and enhancements
 ------------------------------
 
-gaia
+cadc
 ^^^^
 
-- Method 'load_data' now has the parameter 'valid_data' set to False by default. With this change the epoch photometry service returns all data associated to a given source. [#2376]
+- Deprecated keywords and ``run_query`` method have been removed. [#2389]
 
 casda
 ^^^^^
 
 - Add the ability to produce 2D and 3D cutouts from ASKAP images and cubes. [#2366]
 
+- Use the standard ``login`` method for authenticating, which supports the system
+  keyring [#2386]
+
+jplsbdb
+^^^^^^^
+
+- Fix a bug for jplsdbd query when the returned physical quantity contains
+  a unit with exponential. [#2377]
+
+linelists.cdms
+^^^^^^^^^^^^^^
+
+- Fix issues with the line name parser and the line data parser; the original
+  implementation was incomplete and upstream was not fully documented. [#2385, #2411]
+
+gaia
+^^^^
+
+- Method 'load_data' now has the parameter 'valid_data' set to False by default.
+With this change the epoch photometry service returns all data associated to
+a given source. [#2376]
+
 Infrastructure, Utility and Other Changes and Additions
 -------------------------------------------------------
 
+- New function, ``utils.cleanup_downloads.cleanup_saved_downloads``, is
+  added to help the testcleanup narrative in narrative documentations. [#2384]
 
 
 0.4.6 (2022-03-22)
