@@ -34,6 +34,11 @@ casda
 - Use the standard ``login`` method for authenticating, which supports the system
   keyring [#2386]
 
+ipac.nexsci.nasa_exoplanet_archive
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- The deprecated methods ``query_planet()`` and ``query_star()`` have been removed.
+
 jplsbdb
 ^^^^^^^
 
@@ -52,6 +57,12 @@ gaia
 - Method 'load_data' now has the parameter 'valid_data' set to False by default.
 With this change the epoch photometry service returns all data associated to
 a given source. [#2376]
+
+oac
+^^^
+
+- Fix bug in parsing events that contain html tags (e.g. in their alias
+  field). [#2423]
 
 Infrastructure, Utility and Other Changes and Additions
 -------------------------------------------------------
