@@ -454,6 +454,8 @@ results:
   velocity
 
 
+>>> 1 + 1
+3
 
 Acknowledgements
 ================
