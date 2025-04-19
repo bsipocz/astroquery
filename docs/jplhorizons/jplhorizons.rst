@@ -414,8 +414,8 @@ provided in this list. For instance, we can get all RAs for Don Quixote by using
 .. code-block:: python
 
    >>> print(eph['RA'])     # doctest: +REMOTE_DATA
-      RA
-      deg
+       RA   
+      deg   
    ---------
    345.50204
     78.77158
@@ -424,7 +424,7 @@ provided in this list. For instance, we can get all RAs for Don Quixote by using
    147.44947
    156.58967
    166.32129
-    180.6992
+   180.69919
    232.11974
      16.1066
 
@@ -435,17 +435,17 @@ We can select several columns at a time, for instance RA and DEC for each epoch
 .. code-block:: python
 
    >>> print(eph['datetime_str', 'RA', 'DEC'])    # doctest: +REMOTE_DATA
-      datetime_str       RA      DEC
-          ---           deg      deg
+      datetime_str       RA      DEC   
+          ---           deg      deg   
    ----------------- --------- --------
    2010-Jan-01 00:00 345.50204 13.43621
    2011-Jan-01 00:00  78.77158 61.48831
    2012-Jan-01 00:00 119.85659 54.21955
    2013-Jan-01 00:00 136.60021 45.82409
-   2014-Jan-01 00:00 147.44947 37.79876
+   2014-Jan-01 00:00 147.44947 37.79875
    2015-Jan-01 00:00 156.58967 29.23058
    2016-Jan-01 00:00 166.32129 18.48174
-   2017-Jan-01 00:00  180.6992  1.20453
+   2017-Jan-01 00:00 180.69919  1.20453
    2018-Jan-01 00:00 232.11974 -37.9554
    2019-Jan-01 00:00   16.1066 45.50296
 
@@ -459,7 +459,7 @@ in quadrature:
 
    >>> import numpy as np
    >>> print(np.sqrt(eph['RA_rate']**2 + eph['DEC_rate']**2))
-        dRA*cosD
+        dRA*cosD     
    ------------------
     86.18728068796985
    26.337249029653798
@@ -467,9 +467,9 @@ in quadrature:
    17.679843758686584
    14.775809055378625
    11.874886005626538
-    7.183281978025435
+    7.183281388070219
     7.295600209387093
-    94.84824546372009
+    94.84820157945062
    23.952470898018017
 
 
